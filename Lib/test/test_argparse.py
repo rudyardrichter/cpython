@@ -5044,6 +5044,15 @@ class TestArgumentError(TestCase):
         error = argparse.ArgumentError(None, msg)
         self.assertEqual(str(error), msg)
 
+    def test_default_validates_against_choices(self):
+        parser = ErrorRaisingArgumentParser()
+        parser.add_argument('--choice-with-default', choices=['a', 'b'],
+                            default='foo')
+        with self.assertRaises(ArgumentParserError) as cm:
+            parser.parse_args([])
+        msg = str(cm.exception)
+        self.assertRegex(msg, 'invalid choice')
+
 # =======================
 # ArgumentTypeError tests
 # =======================

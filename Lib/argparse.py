@@ -2128,8 +2128,9 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
                         isinstance(action.default, str) and
                         hasattr(namespace, action.dest) and
                         action.default is getattr(namespace, action.dest)):
-                        setattr(namespace, action.dest,
-                                self._get_value(action, action.default))
+                        value = self._get_value(action, action.default)
+                        self._check_value(action, value)
+                        setattr(namespace, action.dest, value)
 
         if required_actions:
             self.error(_('the following arguments are required: %s') %
